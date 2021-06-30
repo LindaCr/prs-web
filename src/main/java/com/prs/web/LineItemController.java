@@ -1,5 +1,7 @@
 package com.prs.web;
 
+import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +36,30 @@ public class LineItemController {
 	
 	@PostMapping("/")
 	public LineItem add(@RequestBody LineItem lineItem) {
-		return lineItemRepo.save(lineItem);
+		LineItem li=lineItemRepo.save(lineItem);
+		if (recalculateTotal(lineItem.getRequest())) {
+			
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Exception caught during line item post");
+		}
+		return li;
 	}
 	
 	@PutMapping("/")
 	public LineItem update(@RequestBody LineItem lineItem) {
-		return lineItemRepo.save(lineItem);
+		LineItem li=lineItemRepo.save(lineItem);
+		if (recalculateTotal(lineItem.getRequest())) {
+			
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Exception caught during line item update");
+		}
+		return li;
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	public Optional<LineItem> delete(@PathVariable Integer id) {
@@ -48,6 +67,9 @@ public class LineItemController {
 		if (lineItem.isPresent()) {
 			try {
 			lineItemRepo.deleteById(id);
+			if (!recalculateTotal(lineItem.get().getRequest())) {
+				throw new Exception ("Issue recalculating Total on delete.");
+			}
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -66,6 +88,29 @@ public class LineItemController {
 		Optional<Request> request=requestRepo.findById(id);
 		return lineItemRepo.findAllByRequest(request.get());
 	}
+	
+	private boolean recalculateTotal(Request request) {
+		boolean success= false;
+		
+		try {
+			List<LineItem> lis=lineItemRepo.findAllByRequest(request);
+			
+			double total=0.0;
+			for (LineItem li:lis) {
+				total+=li.getProduct().getPrice()*li.getQuantity();
+			}
+			
+			request.setTotal(total);
+			requestRepo.save(request);
+			success=true;
+		} catch (Exception e) {
+			System.err.println("Error saving new request value.");
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
+	
 	
 	
 	

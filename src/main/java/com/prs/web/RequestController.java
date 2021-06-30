@@ -84,16 +84,24 @@ public class RequestController {
 		return requestRepo.save(request);
 	}
 	
-	//@GetMapping("/list-review/{id}")
-	//public Optional<Request> getUserandStatus(@PathVariable Integer id) {
-		//Optional<Request> request=requestRepo.findById(id);
-		//if (userId!=id) {
+	@GetMapping("/list-review/{id}")
+	public Iterable<Request> getAllByStatus(@PathVariable int id) {
+		return requestRepo.findAllByStatusAndUserIdNot("Review", id);
+	}
+	
+	@PutMapping("/approve")
+	public Request approveStatus(@RequestBody Request request) {
+		request.setStatus("Approved");
+		return requestRepo.save(request);
+	}
+	
+	@PutMapping("/reject")
+	public Request rejectStatus(@RequestBody Request request) {
+		request.setStatus("Rejected");
+		return requestRepo.save(request);
+	}
+	
+	
+	
 		
-		//}
-		 
-	//}
-	
-	
-	
-	
 }
