@@ -1,5 +1,7 @@
 package com.prs.web;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.business.Request;
+import com.prs.business.User;
 import com.prs.db.RequestRepo;
+import com.prs.db.UserRepo;
 
 @CrossOrigin
 @RestController
@@ -18,6 +22,8 @@ public class RequestController {
 
 	@Autowired
 	private RequestRepo requestRepo;
+	@Autowired
+	private UserRepo userRepo;
 	
 	@GetMapping("/")
 	public Iterable<Request> getAll() {
@@ -31,6 +37,9 @@ public class RequestController {
 	
 	@PostMapping("/")
 	public Request add(@RequestBody Request request) {
+		LocalDateTime currentDate=LocalDateTime.now();
+		request.setStatus("New");
+		request.setSubmittedDate(currentDate);
 		return requestRepo.save(request);
 	}
 	
@@ -59,10 +68,32 @@ public class RequestController {
 			}
 		}
 		else {
-			System.err.println("User delete error- no request found for id"+id);
+			System.err.println("Request delete error- no request found for id"+id);
 		}
 		return request;
 	}
+	
+	@PutMapping("/submit-review")
+	public Request updateStatus(@RequestBody Request request) {
+		if (request.getTotal()<=50) {
+			request.setStatus("Approved");
+		}
+		else {
+			request.setStatus("Review");
+		}
+		return requestRepo.save(request);
+	}
+	
+	//@GetMapping("/list-review/{id}")
+	//public Optional<Request> getUserandStatus(@PathVariable Integer id) {
+		//Optional<Request> request=requestRepo.findById(id);
+		//if (userId!=id) {
+		
+		//}
+		 
+	//}
+	
+	
 	
 	
 }

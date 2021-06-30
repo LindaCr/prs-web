@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.business.LineItem;
+import com.prs.business.Request;
 import com.prs.db.LineItemRepo;
+import com.prs.db.RequestRepo;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/lineitems")
+@RequestMapping("/api/line-items")
 public class LineItemController {
 
 	@Autowired
 	private LineItemRepo lineItemRepo;
+	@Autowired
+	private RequestRepo requestRepo;
 	
 	@GetMapping("/")
 	public Iterable<LineItem> getAll() {
@@ -55,6 +59,12 @@ public class LineItemController {
 			System.err.println("LineItem delete error- no lineItem found for id"+id);
 		}
 		return lineItem;
+	}
+	
+	@GetMapping("/lines-for-pr/{id}")
+	public Iterable<LineItem> getAllByRequest(@PathVariable int id) {
+		Optional<Request> request=requestRepo.findById(id);
+		return lineItemRepo.findAllByRequest(request.get());
 	}
 	
 	

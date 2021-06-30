@@ -65,4 +65,12 @@ public class UserController {
 		return user;
 	}
 	
+	@PostMapping("/login")
+	public User login(@RequestBody User user) {
+		user.getUsername();
+		user.getPassword();
+		return user;
+	}
+	
+	
 }
