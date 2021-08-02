@@ -1,7 +1,7 @@
 package com.prs.web;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.business.Request;
-import com.prs.business.User;
 import com.prs.db.RequestRepo;
-import com.prs.db.UserRepo;
 
 @CrossOrigin
 @RestController
@@ -22,8 +20,6 @@ public class RequestController {
 
 	@Autowired
 	private RequestRepo requestRepo;
-	@Autowired
-	private UserRepo userRepo;
 	
 	@GetMapping("/")
 	public Iterable<Request> getAll() {

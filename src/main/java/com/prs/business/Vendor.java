@@ -25,7 +25,7 @@ public class Vendor {
 
 
 	public Vendor(int id, String code, String name, String address, String city, String state, String zip,
-			String phoneNbr, String email) {
+			String phone, String email) {
 		super();
 		this.id = id;
 		this.code = code;
