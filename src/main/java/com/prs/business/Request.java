@@ -24,7 +24,7 @@ public class Request {
 	private String deliveryMode;
 	private String status;
 	private double total;
-	private LocalDateTime submittedDate;
+	private LocalDate submittedDate;
 	private String reasonForRejection;
 	
 	
@@ -34,7 +34,7 @@ public class Request {
 
 
 	public Request(int id, User user, String description, String justification, LocalDate dateNeeded,
-			String deliveryMode, String status, double total, LocalDateTime submittedDate, String reasonForRejection) {
+			String deliveryMode, String status, double total, LocalDate submittedDate, String reasonForRejection) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -129,12 +129,12 @@ public class Request {
 	}
 
 
-	public LocalDateTime getSubmittedDate() {
+	public LocalDate getSubmittedDate() {
 		return submittedDate;
 	}
 
 
-	public void setSubmittedDate(LocalDateTime submittedDate) {
+	public void setSubmittedDate(LocalDate submittedDate) {
 		this.submittedDate = submittedDate;
 	}
 

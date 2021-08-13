@@ -1,5 +1,6 @@
 package com.prs.web;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class RequestController {
 	
 	@PostMapping("/")
 	public Request add(@RequestBody Request request) {
-		LocalDateTime currentDate=LocalDateTime.now();
+		LocalDate currentDate=LocalDate.now();
 		request.setStatus("New");
 		request.setSubmittedDate(currentDate);
 		return requestRepo.save(request);
